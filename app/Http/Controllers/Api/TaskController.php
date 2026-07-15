@@ -43,10 +43,16 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Task $task)
     {
-        //
+        $task->load([
+            'workspace',
+            'assignedUser'
+        ]);
+
+        return response()->json($task);
     }
+
 
     /**
      * Update the specified resource in storage.

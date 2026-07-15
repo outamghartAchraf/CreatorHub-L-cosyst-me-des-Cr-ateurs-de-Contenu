@@ -7,5 +7,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Portfolio extends Model
 {
-    //
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'title',
+        'description',
+        'media_url',
+        'media_type'
+    ];
+
+    
 }

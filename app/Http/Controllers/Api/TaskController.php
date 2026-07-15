@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Task;
+use App\Http\Requests\TaskRequest;
 
 class TaskController extends Controller
 {
@@ -22,9 +24,20 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+ public function store(TaskRequest $request)
     {
-        //
+        $task = Task::create([
+            'workspace_id' => $request->workspace_id,
+            'assigned_to' => $request->assigned_to,
+            'title' => $request->title,
+            'description' => $request->description,
+            'status' => 'todo',
+        ]);
+
+        return response()->json([
+            'message' => 'Task created successfully',
+            'data' => $task
+        ], 201);
     }
 
     /**

@@ -36,5 +36,8 @@ class PortfolioController extends Controller
             'media_url' => $request->media_url,
             'media_type' => $request->media_type,
         ]);
+
+        $portfolio->tags()->attach($request->tags);
+        return redirect()->route('feed')->with('success', 'Votre realisation a ete publiee avec succes !');
     }
 }

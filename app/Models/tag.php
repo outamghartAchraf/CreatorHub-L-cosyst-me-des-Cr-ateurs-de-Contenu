@@ -10,4 +10,8 @@ class tag extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
+
+    public function portfolio(){
+        return $this->belongsToMany(portfolio::class, 'portfolio_tag');
+    }
 }

@@ -9,5 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class PortfolioController extends Controller
 {
-    //
+    public function feed(){
+        $portFolios = Portfolio::with(['user', 'tags'])
+            ->latest()
+            ->get();
+        return view('feed', compact('portfolios'));
+    }
 }

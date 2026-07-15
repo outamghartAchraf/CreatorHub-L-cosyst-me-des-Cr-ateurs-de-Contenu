@@ -51,7 +51,13 @@ public function store(WorkspaceRequest $request)
      */
     public function show(Workspace $workspace)
     {
-        //
+        $workspace->load([
+            'creator',
+            'members',
+            'tasks.assignedUser'
+        ]);
+
+        return response()->json($workspace);
     }
 
     /**

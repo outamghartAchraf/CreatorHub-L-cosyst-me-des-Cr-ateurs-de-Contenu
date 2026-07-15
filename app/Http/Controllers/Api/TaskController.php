@@ -57,9 +57,20 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+ public function update(TaskRequest $request, Task $task)
     {
-        //
+        $task->update([
+            'assigned_to' => $request->assigned_to,
+            'title' => $request->title,
+            'description' => $request->description,
+            'status' => $request->status,
+            'deliverable_link' => $request->deliverable_link,
+        ]);
+
+        return response()->json([
+            'message' => 'Task updated successfully',
+            'data' => $task
+        ]);
     }
 
     /**

@@ -96,8 +96,20 @@ public function store(WorkspaceRequest $request)
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Workspace $workspace)
-    {
-        //
+    public function destroy(
+        Request $request,
+        Workspace $workspace
+    ) {
+        if ($workspace->creator_id !== $request->user()->id) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $workspace->delete();
+
+        return response()->json([
+            'message' => 'Workspace deleted successfully'
+        ]);
     }
 }

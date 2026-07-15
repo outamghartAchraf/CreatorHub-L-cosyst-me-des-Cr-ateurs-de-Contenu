@@ -14,7 +14,11 @@ class WorkspaceController extends Controller
      */
     public function index()
     {
-        //
+        $workspaces = Workspace::with(['creator', 'members', 'tasks'])
+            ->latest()
+            ->get();
+
+        return response()->json($workspaces);
     }
 
     /**

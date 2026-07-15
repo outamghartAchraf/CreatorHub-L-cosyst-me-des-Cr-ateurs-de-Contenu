@@ -51,4 +51,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function portfolios(){
+        return $this->hasMany(Portfolio::class);
+    }
 }

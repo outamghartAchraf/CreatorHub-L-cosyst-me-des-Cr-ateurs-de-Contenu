@@ -12,9 +12,13 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $tasks = Task::with([
+            'workspace',
+            'assignedUser'
+        ])->latest()->get();
 
+        return response()->json($tasks);
+    }
     /**
      * Store a newly created resource in storage.
      */

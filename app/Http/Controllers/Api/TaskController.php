@@ -24,7 +24,7 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
- public function store(TaskRequest $request)
+    public function store(TaskRequest $request)
     {
         $task = Task::create([
             'workspace_id' => $request->workspace_id,
@@ -57,7 +57,7 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
- public function update(TaskRequest $request, Task $task)
+    public function update(TaskRequest $request, Task $task)
     {
         $task->update([
             'assigned_to' => $request->assigned_to,
@@ -86,19 +86,35 @@ class TaskController extends Controller
     }
 
     public function updateStatus(Request $request, Task $task)
-{
-    $request->validate([
-        'status' => 'required|in:todo,in_progress,review,validated'
-    ]);
+    {
+        $request->validate([
+            'status' => 'required|in:todo,in_progress,review,validated'
+        ]);
 
-    $task->update([
-        'status' => $request->status
-    ]);
+        $task->update([
+            'status' => $request->status
+        ]);
 
-    return response()->json([
-        'message' => 'Task status updated',
-        'data' => $task
-    ]);
-}
+        return response()->json([
+            'message' => 'Task status updated',
+            'data' => $task
+        ]);
+    }
 
+    public function submitDeliverable(Request $request, Task $task)
+    {
+        $request->validate([
+            'deliverable_link' => 'required|url'
+        ]);
+
+        $task->update([
+            'deliverable_link' => $request->deliverable_link,
+            'status' => 'review'
+        ]);
+
+        return response()->json([
+            'message' => 'Deliverable submitted successfully',
+            'data' => $task
+        ]);
+    }
 }

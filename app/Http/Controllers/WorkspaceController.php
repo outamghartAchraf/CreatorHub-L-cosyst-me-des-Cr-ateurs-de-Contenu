@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Workspace;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\WorkspaceRequest;
 
 class WorkspaceController extends Controller
 {
@@ -27,10 +28,19 @@ class WorkspaceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+public function store(WorkspaceRequest $request)
+{
+    $workspace = Workspace::create([
+        'creator_id' => $request->user()->id,
+        'title' => $request->title,
+        'description' => $request->description,
+    ]);
+
+    return response()->json([
+        'message' => 'Workspace created successfully',
+        'data' => $workspace
+    ], 201);
+}
 
     /**
      * Display the specified resource.

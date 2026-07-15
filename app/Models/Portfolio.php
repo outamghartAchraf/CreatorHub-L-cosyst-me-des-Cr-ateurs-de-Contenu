@@ -17,5 +17,8 @@ class Portfolio extends Model
         'media_type'
     ];
 
-    
+    public function user(){
+        return $this->belongsTo(User::class);
+
+    }
 }

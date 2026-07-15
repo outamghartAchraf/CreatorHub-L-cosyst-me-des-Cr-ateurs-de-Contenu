@@ -16,9 +16,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('image')->nullable();
-            $table->text('bio')->nullable();
-            $table->enum('role', ['creator', 'freelancer'])->default('freelancer');
-            $table->decimal('hourly_rate', 10, 2)->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

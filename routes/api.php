@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\WorkspaceController;
+use App\Http\Controllers\Api\TaskController;
 
 
 
@@ -15,6 +16,9 @@ Route::middleware('auth:sanctum')->group(function () {
         'workspaces',
         WorkspaceController::class
     );
+
+        Route::apiResource('tasks', TaskController::class);
+
 
     Route::post('/logout', [AuthController::class, 'logout']);
 

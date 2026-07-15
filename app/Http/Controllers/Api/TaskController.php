@@ -85,4 +85,20 @@ class TaskController extends Controller
         ]);
     }
 
+    public function updateStatus(Request $request, Task $task)
+{
+    $request->validate([
+        'status' => 'required|in:todo,in_progress,review,validated'
+    ]);
+
+    $task->update([
+        'status' => $request->status
+    ]);
+
+    return response()->json([
+        'message' => 'Task status updated',
+        'data' => $task
+    ]);
+}
+
 }

@@ -71,10 +71,27 @@ public function store(WorkspaceRequest $request)
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Workspace $workspace)
-    {
-        //
+    public function update(
+        WorkspaceRequest $request,
+        Workspace $workspace
+    ) {
+        if ($workspace->creator_id !== $request->user()->id) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $workspace->update([
+            'title' => $request->title,
+            'description' => $request->description,
+        ]);
+
+        return response()->json([
+            'message' => 'Workspace updated successfully',
+            'data' => $workspace
+        ]);
     }
+
 
     /**
      * Remove the specified resource from storage.

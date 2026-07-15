@@ -15,4 +15,9 @@ class PortfolioController extends Controller
             ->get();
         return view('feed', compact('portfolios'));
     }
+
+    public function create(){
+        $tags = Tag::all();
+        return view('portfolios.create', compact('tags'));
+    }
 }

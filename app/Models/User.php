@@ -67,4 +67,12 @@ class User extends Authenticatable
             'assigned_to'
         );
     }
+
+    public function joinedWorkspaces()
+{
+    return $this->belongsToMany(
+        Workspace::class,
+        'workspace_members'
+    );
+}
 }

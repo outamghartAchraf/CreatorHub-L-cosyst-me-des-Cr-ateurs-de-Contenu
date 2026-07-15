@@ -112,4 +112,26 @@ public function store(WorkspaceRequest $request)
             'message' => 'Workspace deleted successfully'
         ]);
     }
+
+    public function addMember(Request $request, Workspace $workspace)
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id'
+    ]);
+
+    if ($workspace->creator_id !== $request->user()->id) {
+
+        return response()->json([
+            'message' => 'Only creator can invite members'
+        ], 403);
+    }
+
+    $workspace->members()->syncWithoutDetaching([
+        $request->user_id
+    ]);
+
+    return response()->json([
+        'message' => 'Member added successfully'
+    ]);
+}
 }

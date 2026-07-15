@@ -6,6 +6,7 @@ use App\Models\Workspace;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\WorkspaceRequest;
+use App\Models\User;
 
 class WorkspaceController extends Controller
 {
@@ -32,19 +33,19 @@ class WorkspaceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-public function store(WorkspaceRequest $request)
-{
-    $workspace = Workspace::create([
-        'creator_id' => $request->user()->id,
-        'title' => $request->title,
-        'description' => $request->description,
-    ]);
+    public function store(WorkspaceRequest $request)
+    {
+        $workspace = Workspace::create([
+            'creator_id' => $request->user()->id,
+            'title' => $request->title,
+            'description' => $request->description,
+        ]);
 
-    return response()->json([
-        'message' => 'Workspace created successfully',
-        'data' => $workspace
-    ], 201);
-}
+        return response()->json([
+            'message' => 'Workspace created successfully',
+            'data' => $workspace
+        ], 201);
+    }
 
     /**
      * Display the specified resource.
@@ -114,47 +115,53 @@ public function store(WorkspaceRequest $request)
     }
 
     public function addMember(Request $request, Workspace $workspace)
-{
-    $request->validate([
-        'user_id' => 'required|exists:users,id'
-    ]);
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id'
+        ]);
 
-    if ($workspace->creator_id !== $request->user()->id) {
+        if ($workspace->creator_id !== $request->user()->id) {
 
-        return response()->json([
-            'message' => 'Only creator can invite members'
-        ], 403);
-    }
+            return response()->json([
+                'message' => 'Only creator can invite members'
+            ], 403);
+        }
 
-    $workspace->members()->syncWithoutDetaching([
-        $request->user_id
-    ]);
-
-    return response()->json([
-        'message' => 'Member added successfully'
-    ]);
-}
-
-public function removeMember(
-    Request $request,
-    Workspace $workspace,
-    User $user
-) {
-
-    if ($workspace->creator_id !== $request->user()->id) {
+        $workspace->members()->syncWithoutDetaching([
+            $request->user_id
+        ]);
 
         return response()->json([
-            'message' => 'Only creator can remove members'
-        ], 403);
+            'message' => 'Member added successfully'
+        ]);
     }
 
-    $workspace->members()->detach(
-        $user->id
-    );
+    public function removeMember(
+        Request $request,
+        Workspace $workspace,
+        User $user
+    ) {
 
-    return response()->json([
-        'message' => 'Member removed successfully'
-    ]);
-}
+        if ($workspace->creator_id !== $request->user()->id) {
 
+            return response()->json([
+                'message' => 'Only creator can remove members'
+            ], 403);
+        }
+
+        $workspace->members()->detach(
+            $user->id
+        );
+
+        return response()->json([
+            'message' => 'Member removed successfully'
+        ]);
+    }
+
+    public function members(Workspace $workspace)
+    {
+        return response()->json(
+            $workspace->members
+        );
+    }
 }

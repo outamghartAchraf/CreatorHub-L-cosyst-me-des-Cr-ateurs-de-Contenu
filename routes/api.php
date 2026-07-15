@@ -29,6 +29,27 @@ Route::post(
     [TaskController::class, 'submitDeliverable']
 );
 
+ Route::post(
+        '/workspaces/{workspace}/members',
+        [WorkspaceController::class, 'addMember']
+    );
+
+    Route::delete(
+        '/workspaces/{workspace}/members/{user}',
+        [WorkspaceController::class, 'removeMember']
+    );
+
+    Route::get(
+        '/workspaces/{workspace}/members',
+        [WorkspaceController::class, 'members']
+    );
+
+    Route::patch(
+    '/tasks/{task}/validate',
+    [TaskController::class, 'validateTask']
+);
+
+
     Route::post('/logout', [AuthController::class, 'logout']);
 
 });

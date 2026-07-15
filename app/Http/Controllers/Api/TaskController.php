@@ -88,7 +88,7 @@ class TaskController extends Controller
     public function updateStatus(Request $request, Task $task)
     {
         $request->validate([
-            'status' => 'required|in:todo,in_progress,review,validated'
+            'status' => 'required|in:todo,in_progress,review'
         ]);
 
         $task->update([
@@ -103,6 +103,13 @@ class TaskController extends Controller
 
     public function submitDeliverable(Request $request, Task $task)
     {
+        if ($task->assigned_to !== $request->user()->id) {
+
+            return response()->json([
+                'message' => 'Only assigned user can submit deliverable'
+            ], 403);
+        }
+
         $request->validate([
             'deliverable_link' => 'required|url'
         ]);
@@ -115,6 +122,36 @@ class TaskController extends Controller
         return response()->json([
             'message' => 'Deliverable submitted successfully',
             'data' => $task
+        ]);
+    }
+
+    public function validateTask(
+        Request $request,
+        Task $task
+    ) {
+        $workspace = $task->workspace;
+
+        if ($workspace->creator_id !== $request->user()->id) {
+
+            return response()->json([
+                'message' => 'Only creator can validate task'
+            ], 403);
+        }
+
+        if ($task->status !== 'review') {
+
+            return response()->json([
+                'message' => 'Task must be in review status'
+            ], 422);
+        }
+
+        $task->update([
+            'status' => 'validated'
+        ]);
+
+        return response()->json([
+            'message' => 'Task validated successfully',
+            'task' => $task
         ]);
     }
 }

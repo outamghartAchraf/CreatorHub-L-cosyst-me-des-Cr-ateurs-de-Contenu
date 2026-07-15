@@ -134,4 +134,27 @@ public function store(WorkspaceRequest $request)
         'message' => 'Member added successfully'
     ]);
 }
+
+public function removeMember(
+    Request $request,
+    Workspace $workspace,
+    User $user
+) {
+
+    if ($workspace->creator_id !== $request->user()->id) {
+
+        return response()->json([
+            'message' => 'Only creator can remove members'
+        ], 403);
+    }
+
+    $workspace->members()->detach(
+        $user->id
+    );
+
+    return response()->json([
+        'message' => 'Member removed successfully'
+    ]);
+}
+
 }

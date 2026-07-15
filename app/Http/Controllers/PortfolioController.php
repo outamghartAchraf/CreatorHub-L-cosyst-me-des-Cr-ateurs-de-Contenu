@@ -20,4 +20,14 @@ class PortfolioController extends Controller
         $tags = Tag::all();
         return view('portfolios.create', compact('tags'));
     }
+    public function store(Request $request){
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'media_url' => 'required|in:image,video',
+            'media_type' => 'required|in:image,video',
+            'tags' => 'required|array',
+            'tags.*' => 'exists:tags,id',
+        ]);
+    }
 }

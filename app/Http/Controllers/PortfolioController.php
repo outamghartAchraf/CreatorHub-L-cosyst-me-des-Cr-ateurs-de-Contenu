@@ -29,5 +29,12 @@ class PortfolioController extends Controller
             'tags' => 'required|array',
             'tags.*' => 'exists:tags,id',
         ]);
+
+        $portfolio = Auth::user()->portfolios()->create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'media_url' => $request->media_url,
+            'media_type' => $request->media_type,
+        ]);
     }
 }

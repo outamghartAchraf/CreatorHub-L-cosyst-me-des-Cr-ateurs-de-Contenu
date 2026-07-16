@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Job;
+use App\Http\Requests\StoreJobRequest;
+use App\Http\Requests\UpdateJobRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class JobController extends Controller
@@ -21,30 +23,22 @@ class JobController extends Controller
     /**
      * Créer une nouvelle offre.
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'budget' => 'required|numeric',
-            'deadline' => 'required|date',
-        ]);
+    public function store(StoreJobRequest $request)
+{
+    $job = Job::create([
+        'user_id' => Auth::id(),
+        'title' => $request->title,
+        'description' => $request->description,
+        'budget' => $request->budget,
+        'deadline' => $request->deadline,
+        'status' => 'open',
+    ]);
 
-        $job = Job::create([
-            'user_id' => Auth::id(),
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'budget' => $validated['budget'],
-            'deadline' => $validated['deadline'],
-            'status' => 'open',
-        ]);
-
-        return response()->json([
-            'message' => 'Offre créée avec succès.',
-            'job' => $job
-        ], 201);
-    }
-
+    return response()->json([
+        'message' => 'Offre créée avec succès.',
+        'job' => $job
+    ], 201);
+}
     /**
      * Afficher une offre.
      */

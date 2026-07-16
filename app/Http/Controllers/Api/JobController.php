@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
 use App\Http\Controllers\Controller;
 use App\Models\Job;
 use App\Http\Requests\StoreJobRequest;
@@ -10,9 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class JobController extends Controller
 {
-    /**
-     * Afficher toutes les offres.
-     */
+
     public function index()
     {
         $jobs = Job::with('user')->latest()->get();
@@ -20,9 +17,7 @@ class JobController extends Controller
         return response()->json($jobs);
     }
 
-    /**
-     * Créer une nouvelle offre.
-     */
+
     public function store(StoreJobRequest $request)
 {
     $job = Job::create([
@@ -39,17 +34,13 @@ class JobController extends Controller
         'job' => $job
     ], 201);
 }
-    /**
-     * Afficher une offre.
-     */
+
     public function show(Job $job)
     {
         return response()->json($job->load('user'));
     }
 
-    /**
-     * Modifier une offre.
-     */
+
     public function update(UpdateJobRequest $request, Job $job)
 {
     $job->update($request->validated());
@@ -59,9 +50,7 @@ class JobController extends Controller
         'job' => $job
     ]);
 }
-    /**
-     * Supprimer une offre.
-     */
+
     public function destroy(Job $job)
     {
         $job->delete();

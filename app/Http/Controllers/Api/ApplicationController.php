@@ -9,12 +9,8 @@ use Illuminate\Support\Facades\Auth;
 
 class ApplicationController extends Controller
 {
-    /**
-     * Postuler à une offre.
-     */
     public function apply(Job $job)
     {
-        // Vérifier si l'utilisateur a déjà postulé
         $exists = Application::where('job_id', $job->id)
             ->where('user_id', Auth::id())
             ->exists();
@@ -37,9 +33,7 @@ class ApplicationController extends Controller
         ], 201);
     }
 
-    /**
-     * Voir les candidatures d'une offre.
-     */
+
     public function index(Job $job)
     {
         return response()->json(

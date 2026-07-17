@@ -35,11 +35,17 @@ class ApplicationController extends Controller
 
 
     public function index(Job $job)
-    {
-        return response()->json(
-            $job->applications()->with('user')->get()
-        );
+{
+    if ($job->user_id !== Auth::id()) {
+        return response()->json([
+            'message' => 'Accès interdit.'
+        ], 403);
     }
+
+    return response()->json(
+        $job->applications()->with('user')->get()
+    );
+}
 
     /**
      * Accepter ou refuser une candidature.

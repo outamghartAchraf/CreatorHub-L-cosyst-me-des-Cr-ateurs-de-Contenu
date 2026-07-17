@@ -41,8 +41,14 @@ class JobController extends Controller
     }
 
 
-    public function update(UpdateJobRequest $request, Job $job)
+   public function update(UpdateJobRequest $request, Job $job)
 {
+    if ($job->user_id !== Auth::id()) {
+        return response()->json([
+            'message' => 'Accès interdit.'
+        ], 403);
+    }
+
     $job->update($request->validated());
 
     return response()->json([

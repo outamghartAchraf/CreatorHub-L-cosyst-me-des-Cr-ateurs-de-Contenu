@@ -50,19 +50,25 @@ class ApplicationController extends Controller
     /**
      * Accepter ou refuser une candidature.
      */
-    public function update(Application $application)
-    {
-        request()->validate([
-            'status' => 'required|in:accepted,rejected',
-        ]);
-
-        $application->update([
-            'status' => request('status'),
-        ]);
-
+   public function update(Application $application)
+{
+    if ($application->job->user_id !== Auth::id()) {
         return response()->json([
-            'message' => 'Statut mis à jour.',
-            'application' => $application,
-        ]);
+            'message' => 'Accès interdit.'
+        ], 403);
     }
+
+    request()->validate([
+        'status' => 'required|in:accepted,rejected',
+    ]);
+
+    $application->update([
+        'status' => request('status'),
+    ]);
+
+    return response()->json([
+        'message' => 'Statut mis à jour.',
+        'application' => $application,
+    ]);
+}
 }

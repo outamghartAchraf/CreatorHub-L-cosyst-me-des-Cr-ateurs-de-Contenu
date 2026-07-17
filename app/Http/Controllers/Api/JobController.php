@@ -57,12 +57,18 @@ class JobController extends Controller
     ]);
 }
 
-    public function destroy(Job $job)
-    {
-        $job->delete();
-
+   public function destroy(Job $job)
+{
+    if ($job->user_id !== Auth::id()) {
         return response()->json([
-            'message' => 'Offre supprimée.'
-        ]);
+            'message' => 'Accès interdit.'
+        ], 403);
     }
+
+    $job->delete();
+
+    return response()->json([
+        'message' => 'Offre supprimée avec succès.'
+    ]);
+}
 }

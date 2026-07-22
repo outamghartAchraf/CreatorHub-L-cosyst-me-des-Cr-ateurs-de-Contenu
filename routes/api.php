@@ -2,15 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\PortfolioController; 
 use App\Http\Controllers\WorkspaceController;
 use App\Http\Controllers\Api\TaskController;
 
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-
-Route::post('/register', [App\Http\Controllers\Api\AuthController::class, 'register']);
-Route::post('/login', [App\Http\Controllers\Api\AuthController::class, 'login']);
+Route::get('/feed', [PortfolioController::class, 'feed']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/portfolios', [PortfolioController::class, 'store']);
 
     Route::apiResource(
         'workspaces',
@@ -51,7 +53,6 @@ Route::post(
 
 
     Route::post('/logout', [AuthController::class, 'logout']);
-
 });
 
 

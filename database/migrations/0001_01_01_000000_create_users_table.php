@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('image')->nullable();
+            $table->enum('role', ['creator', 'freelancer'])->default('freelancer'); 
+            $table->text('bio')->nullable();
+            $table->decimal('hourly_rate', 8, 2)->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

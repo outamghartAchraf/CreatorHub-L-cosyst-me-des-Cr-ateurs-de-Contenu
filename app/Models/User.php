@@ -69,4 +69,31 @@ class User extends Authenticatable
     {
         return $this->hasMany(Application::class);
     }
+    public function portfolios(){
+        return $this->hasMany(Portfolio::class);
+    }
+
+    public function workspaces()
+    {
+        return $this->hasMany(
+            Workspace::class,
+            'creator_id'
+        );
+    }
+
+    public function assignedTasks()
+    {
+        return $this->hasMany(
+            Task::class,
+            'assigned_to'
+        );
+    }
+
+    public function joinedWorkspaces()
+{
+    return $this->belongsToMany(
+        Workspace::class,
+        'workspace_members'
+    );
+}
 }

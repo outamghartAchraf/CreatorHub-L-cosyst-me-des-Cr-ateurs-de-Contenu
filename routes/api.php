@@ -4,16 +4,46 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobController;
 use App\Http\Controllers\Api\ApplicationController;
+use App\Http\Controllers\PortfolioController; 
+use App\Http\Controllers\WorkspaceController;
+use App\Http\Controllers\Api\TaskController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/jobs', [JobController::class, 'index']);
 Route::get('/jobs/{job}', [JobController::class, 'show']);
+Route::get('/feed', [PortfolioController::class, 'feed']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/portfolios', [PortfolioController::class, 'store']);
 
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::apiResource(
+        'workspaces',
+        WorkspaceController::class
+    );
+
+        Route::apiResource('tasks', TaskController::class);
+
+        Route::patch(
+    '/tasks/{task}/status',
+    [TaskController::class, 'updateStatus']
+);
+
+Route::post(
+    '/tasks/{task}/submit',
+    [TaskController::class, 'submitDeliverable']
+);
+
+ Route::post(
+        '/workspaces/{workspace}/members',
+        [WorkspaceController::class, 'addMember']
+    );
+
+    Route::delete(
+        '/workspaces/{workspace}/members/{user}',
+        [WorkspaceController::class, 'removeMember']
+    );
 
     Route::post('/jobs', [JobController::class, 'store']);
     Route::put('/jobs/{job}', [JobController::class, 'update']);
@@ -22,4 +52,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/jobs/{job}/apply', [ApplicationController::class, 'apply']);
     Route::get('/jobs/{job}/applications', [ApplicationController::class, 'index']);
     Route::put('/applications/{application}', [ApplicationController::class, 'update']);
+    Route::get(
+        '/workspaces/{workspace}/members',
+        [WorkspaceController::class, 'members']
+    );
+
+    Route::patch(
+    '/tasks/{task}/validate',
+    [TaskController::class, 'validateTask']
+);
+
+
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
+
+
